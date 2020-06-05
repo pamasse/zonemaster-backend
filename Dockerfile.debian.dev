@@ -40,3 +40,5 @@ RUN if [ "$DB" = "PostgreSQL" ]; then \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
     cpanm DBD::Pg && \
     perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl; fi 
+
+CMD ["/usr/lib/postgresql/$DB_VERSION/bin/postgres", "-D", "/var/lib/postgresql/$DB_VERSION/main", "-c", "config_file=/etc/postgresql/$DB_VERSION/main/postgresql.conf"]

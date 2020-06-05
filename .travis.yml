@@ -1,3 +1,4 @@
+sudo: required
 services: 
   - docker
 
@@ -10,10 +11,17 @@ jobs:
       - DB_VERSION=10
       - PERL_VERSION=5.30
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
-
-env:
-  - PERL5LIB=/usr/share/perl5 
-  - ZONEMASTER_RECORD=0
+      - PERL5LIB=/usr/share/perl5 
+      - ZONEMASTER_RECORD=0
+  - env: 
+      - DISTRIBUTION=ubuntu
+      - DISTRIBUTION_VERSION=16.04
+      - DB=PostgreSQL
+      - DB_VERSION=10
+      - PERL_VERSION=5.30
+      - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
+      - PERL5LIB=/usr/share/perl5 
+      - ZONEMASTER_RECORD=0
       
 before_script: #Here, we build all testing environments
     #Build image
