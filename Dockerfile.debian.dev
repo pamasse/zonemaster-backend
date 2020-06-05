@@ -36,7 +36,7 @@ RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaste
 RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-engine.git && \
     ( cd zonemaster-engine && cpanm --verbose --notest . ) && rm -rf zonemaster-engine
 
-RUN if [ "$DB" = "postgreSQL" ]; then \
+RUN if [ "$DB" = "postgres" ]; then \
     apt-get install -y --no-install-recommends python-software-properties software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';" -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
