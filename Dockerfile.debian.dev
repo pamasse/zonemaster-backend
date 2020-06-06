@@ -5,6 +5,8 @@ ARG PERL_VERSION
 ARG DB
 ARG DB_VERSION
 
+RUN apt-get install -y --no-install-recommends git curl
+
 # Installation of the right PERL version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -L https://install.perlbrew.pl | bash && \
@@ -13,7 +15,7 @@ perlbrew install perl-$PERL_VERSION && perlbrew switch perl-$PERL_VERSION
 RUN echo $PERL_VERSION
 
 # From Zonemaster Engine installation instruction 
-RUN apt-get install -y --no-install-recommends git autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
+RUN apt-get install -y --no-install-recommends autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
 
 # From Zonemaster Backend installation instruction 
 RUN apt-get install -y --no-install-recommends libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
