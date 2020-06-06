@@ -5,7 +5,17 @@ ARG PERL_VERSION
 ARG DB
 ARG DB_VERSION
 
-RUN apt-get update && apt-get install -y --no-install-recommends git curl
+# Install a couple dependencies + extra packages
+RUN apt-get update --fix-missing && apt-get install -y \
+    apt-utils \
+    build-essential \
+    curl \
+    gcc \
+    git \
+    gpp \
+    libncurses5-dev \
+    libreadline-dev \
+    libssl-dev 
 
 # Installation of the right PERL version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
