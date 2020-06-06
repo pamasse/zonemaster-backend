@@ -5,7 +5,7 @@ ARG PERL_VERSION
 ARG DB
 ARG DB_VERSION
 
-RUN apt-get install -y --no-install-recommends git curl
+RUN apt-get update && apt-get install -y --no-install-recommends git curl
 
 # Installation of the right PERL version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
