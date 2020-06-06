@@ -30,7 +30,7 @@ jobs:
       
 before_script: #Here, we build all testing environments
     #Build image
-    - docker build -t backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION -f $DOCKERFILE .
+    - docker build -t backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION -f $DOCKERFILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION .
     #Display images
     - docker images -a
 
