@@ -20,7 +20,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
 # Installation of the right PERL version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl -L https://install.perlbrew.pl | bash && \
-perlbrew install perl-$PERL_VERSION && perlbrew switch perl-$PERL_VERSION
+~/perl5/perlbrew/bin/perlbrew install perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
 
 RUN echo $PERL_VERSION
 
