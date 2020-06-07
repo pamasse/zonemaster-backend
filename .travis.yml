@@ -4,7 +4,9 @@ os:
 sudo: required
 services: 
   - docker
-
+  - mysql
+  - postgresql
+  
 jobs:
   include:
   - env: 
@@ -38,6 +40,8 @@ script: #Here, we run tests on the container already build
     - if [[ "$DB" == "SQLite" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl Makefile.PL && make test"; fi
     - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
     - if [[ "$DB" == "MySQL" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl -I./lib ./t/test_DB_backend.pl MySQL"; fi
+    
+
     
 
 #   - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./ci/deploy.rb envdev.tld; fi
