@@ -5,6 +5,10 @@ ARG PERL_VERSION
 ARG DB
 ARG DB_VERSION
 
+RUN echo " perl-$PERL_VERSION " && \
+echo " DB-$DB " && \
+echo " DB_VERSION-$DB_VERSION "
+
 # Install a couple dependencies + extra packages
 RUN apt-get update --fix-missing && apt-get install -y -q \
     apt-utils \
@@ -15,11 +19,11 @@ RUN apt-get update --fix-missing && apt-get install -y -q \
     gpp \
     libncurses5-dev \
     libreadline-dev \
-    libssl-dev &>/dev/null
+    libssl-dev 
 
 # Installation of the right PERL version
 RUN curl -L https://install.perlbrew.pl | bash && \
-echo " perl-$PERL_VERSION " && \
+
 ~/perl5/perlbrew/bin/perlbrew install perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
 
 RUN echo $PERL_VERSION
