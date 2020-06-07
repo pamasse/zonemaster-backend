@@ -6,7 +6,7 @@ ARG DB
 ARG DB_VERSION
 
 # Install a couple dependencies + extra packages
-RUN apt-get update --fix-missing && apt-get install -y \
+RUN apt-get update --fix-missing && apt-get install -y -q \
     apt-utils \
     build-essential \
     curl \
@@ -19,6 +19,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
 
 # Installation of the right PERL version
 RUN curl -L https://install.perlbrew.pl | bash && \
+echo "perl-$PERL_VERSION" && \
 ~/perl5/perlbrew/bin/perlbrew install perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
 
 RUN echo $PERL_VERSION
