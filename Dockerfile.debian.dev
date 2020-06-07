@@ -1,13 +1,7 @@
 ARG IMAGE_NAME="ubuntu:latest"
 FROM $IMAGE_NAME
 
-ARG PERL_VERSION
-ARG DB
-ARG DB_VERSION
-
-RUN echo " perl-$PERL_VERSION " && \
-echo " DB-$DB " && \
-echo " DB_VERSION-$DB_VERSION "
+ARG PERL_VERSION DB DB_VERSION
 
 # Install a couple dependencies + extra packages
 RUN apt-get update --fix-missing && apt-get install -y -q \
@@ -23,7 +17,7 @@ RUN apt-get update --fix-missing && apt-get install -y -q \
 
 # Installation of the right PERL version
 RUN curl -L https://install.perlbrew.pl | bash && \
-
+~/perl5/perlbrew/bin/perlbrew self-install && \
 ~/perl5/perlbrew/bin/perlbrew install perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
 
 RUN echo $PERL_VERSION
