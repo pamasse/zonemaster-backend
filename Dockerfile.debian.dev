@@ -54,10 +54,11 @@ WORKDIR app
 #RUN if [ "$DB" = "postgres" ]; then \
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -qq --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION postgresql-server-dev-$DB_VERSION
 #RUN cpanm --notest DBD::Pg 
-RUN sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
+RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres 
     
     #&& \
     #perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl
+    #sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
