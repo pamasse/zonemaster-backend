@@ -48,10 +48,10 @@ RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaste
 ARG DB 
 ARG DB_VERSION
 
-RUN if [ "$DB" = "postgres" ]; then \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -qq --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION && \
-    runuser -l postgres -c "/usr/lib/postgresql/$DB_VERSION/bin/pg_ctl -D /var/lib/postgresql/10/main -l logfile start" && \
-    psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';" -U postgres && \
-    psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
-    cpanm DBD::Pg && \
-    perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl; fi 
+#RUN if [ "$DB" = "postgres" ]; then \
+RUN    DEBIAN_FRONTEND="noninteractive" apt-get install -qq --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION 
+RUN    runuser -l postgres -c "/usr/lib/postgresql/$DB_VERSION/bin/pg_ctl -D /var/lib/postgresql/10/main -l logfile start" 
+RUN    psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';" -U postgres
+RUN    psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres 
+RUN    cpanm DBD::Pg 
+RUN    perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl
