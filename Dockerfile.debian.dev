@@ -16,33 +16,33 @@ RUN apt-get update --fix-missing -qq && apt-get install -qq \
 ARG PERL_VERSION 
 
 # Installation of the right PERL version
-#RUN curl -L https://install.perlbrew.pl | bash && \
-#~/perl5/perlbrew/bin/perlbrew self-install && \
-#~/perl5/perlbrew/bin/perlbrew install -n -j 2 perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
+RUN curl -L https://install.perlbrew.pl | bash && \
+~/perl5/perlbrew/bin/perlbrew self-install && \
+~/perl5/perlbrew/bin/perlbrew install -n -j 2 perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
 
-#RUN perl --version
+RUN perl --version
 # From Zonemaster Engine installation instruction 
-#RUN apt-get install -y --no-install-recommends -qq gettext libgettextpo-dev autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
+RUN apt-get install -y --no-install-recommends -qq gettext libgettextpo-dev autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
 
 # From Zonemaster Backend installation instruction 
-#RUN apt-get install -y --no-install-recommends -qq libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
+RUN apt-get install -y --no-install-recommends -qq libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
 
 # Zonemaster LDNS needs a newer version of Module::Install
-#RUN cpan install Module::Install Module::Install::XSUtil && \
+RUN cpan install Module::Install Module::Install::XSUtil && \
     # Zonemaster Backend transitively needs a newer version of Devel::CheckLib
-#    cpan install Devel::CheckLib && \
+    cpan install Devel::CheckLib && \
     # Moose installed from OS packages depend on a newer version of Devel::OverloadInfo
-#    cpan install Devel::OverloadInfo Moose && \ 
+    cpan install Devel::OverloadInfo Moose && \ 
     # IO::Socket::INET6 can't find Socket6 unless it's installed from CPAN
-#    cpan install Socket6
+    cpan install Socket6
 
     # Install Zonemaster LDNS
-#RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git && \
-#    ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ) && rm -rf zonemaster-ldns
+RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git && \
+    ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ) && rm -rf zonemaster-ldns
 
     # Install Zonemaster Engine
-#RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-engine.git && \
-#    ( cd zonemaster-engine && cpanm --verbose --notest . ) && rm -rf zonemaster-engine
+RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-engine.git && \
+    ( cd zonemaster-engine && cpanm --verbose --notest . ) && rm -rf zonemaster-engine
 
 
 ARG DB 
@@ -57,8 +57,6 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get install -qq --no-install-recommends
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
-    psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres 
-    
-    #&& \
-    #perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl
-    #sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
+    psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
+    perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl && \
+    sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf 
