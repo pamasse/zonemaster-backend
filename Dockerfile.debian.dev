@@ -49,7 +49,7 @@ ARG DB
 ARG DB_VERSION
 
 RUN if [ "$DB" = "postgres" ]; then \
-    apt-get install -y --no-install-recommends python-software-properties software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION && \
+    apt-get install -y --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';" -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
     cpanm DBD::Pg && \
