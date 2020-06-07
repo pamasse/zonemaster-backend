@@ -15,7 +15,7 @@ RUN apt-get update --fix-missing && apt-get install -y \
     gpp \
     libncurses5-dev \
     libreadline-dev \
-    libssl-dev &>/dev/null
+    libssl-dev 
 
 # Installation of the right PERL version
 RUN curl -L https://install.perlbrew.pl | bash && \
