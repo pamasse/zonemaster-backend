@@ -20,7 +20,7 @@ ARG PERL_VERSION
 # Installation of the right PERL version
 RUN curl -L https://install.perlbrew.pl | bash && \
 ~/perl5/perlbrew/bin/perlbrew self-install && \
-~/perl5/perlbrew/bin/perlbrew install -n -j 2 perl-$PERL_VERSION && ~/perl5/perlbrew/bin/perlbrew switch perl-$PERL_VERSION
+~/perl5/perlbrew/bin/perlbrew install -n -j 2 perl-$PERL_VERSION --switch
 
 RUN perl --version
 # From Zonemaster Engine installation instruction 
