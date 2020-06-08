@@ -66,8 +66,6 @@ RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaste
     ( cd zonemaster-engine && cpanm --verbose --notest . ) && rm -rf zonemaster-engine
 
 
-RUN apt-get -qq install libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libmoose-perl libparallel-forkmanager-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
-
 ARG DB 
 ARG DB_VERSION
 ARG ZONEMASTER_BACKEND_CONFIG_FILE
@@ -77,7 +75,7 @@ WORKDIR app
 
 #RUN if [ "$DB" = "postgres" ]; then \
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
-RUN apt-get install -qq --no-install-recommends libdbd-pg-perl software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION postgresql-server-dev-$DB_VERSION
+RUN apt-get install -qq --no-install-recommends starman software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION postgresql-server-dev-$DB_VERSION
 RUN cpanm --notest DBD::Pg Daemon::Control JSON::Validator Net::IP::XS Try::Tiny Class::Method::Modifiers Config::IniFiles Daemon::Control JSON::RPC::Dispatch Net::IP::XS Parallel::ForkManager Plack::Builder Plack::Middleware::Debug Role::Tiny Router::Simple::Declare Starman Log::Any String::ShellQuote
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
