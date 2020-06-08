@@ -1,6 +1,8 @@
 ARG IMAGE_NAME="ubuntu:latest"
 FROM $IMAGE_NAME
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Install a couple dependencies + extra packages
 RUN apt-get update --fix-missing -qq && apt-get install -qq \
     apt-utils \
@@ -52,10 +54,17 @@ ARG ZONEMASTER_BACKEND_CONFIG_FILE
 COPY . /app
 WORKDIR app
 
+# Set the locale
+RUN apt-get -qq install locales
+RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen fr_FR.UTF-8 && \
+    dpkg-reconfigure locales && \
+    /usr/sbin/update-locale LANG=fr_FR.UTF-8
+ENV LC_ALL fr_FR.UTF-8  
 
 #RUN if [ "$DB" = "postgres" ]; then \
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -qq --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION postgresql-server-dev-$DB_VERSION
+RUN apt-get install -qq --no-install-recommends software-properties-common postgresql-$DB_VERSION postgresql-client-$DB_VERSION postgresql-contrib-$DB_VERSION postgresql-server-dev-$DB_VERSION
 RUN cpanm --notest DBD::Pg Daemon::Control JSON::Validator Net::IP::XS Try::Tiny
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
