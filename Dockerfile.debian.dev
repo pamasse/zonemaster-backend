@@ -41,47 +41,6 @@ ENV PERLBREW_ROOT=/perl5 \
 	PERLBREW_PATH=/perl5/bin:/perl5/perls/perl-$PERL_VERSION/bin \
 	PERLBREW_SKIP_INIT=1
 
-RUN perl --version
-# From Zonemaster Engine installation instruction 
-RUN apt-get install --no-install-recommends -qq gettext libgettextpo-dev autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
-
-# From Zonemaster Backend installation instruction 
-RUN apt-get install --no-install-recommends -qq libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
-
-# Zonemaster LDNS needs a newer version of Module::Install
-RUN cpan install Module::Install Module::Install::XSUtil && \
-    # Zonemaster Backend transitively needs a newer version of Devel::CheckLib
-    cpan install Devel::CheckLib && \
-    # Moose installed from OS packages depend on a newer version of Devel::OverloadInfo
-    cpan install Devel::OverloadInfo Moose && \ 
-    # IO::Socket::INET6 can't find Socket6 unless it's installed from CPAN
-    cpan install Socket6
-
-    # Install Zonemaster LDNS
-RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git && \
-    ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ) && rm -rf zonemaster-ldns
-
-    # Install Zonemaster Engine
-RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-engine.git && \
-    ( cd zonemaster-engine && cpanm --verbose --notest . ) && rm -rf zonemaster-engine
-
-
-ARG DB 
-ARG DB_VERSION
-ARG ZONEMASTER_BACKEND_CONFIG_FILE
-
-COPY . /app
-WORKDIR app
-
-#RUN if [ "$DB" = "postgres" ]; then \
-ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 RUN /perl5/bin/perlbrew off && apt-get install -qq --no-install-recommends software-properties-common postgresql-client-$DB_VERSION && \
     apt-get install -qq --no-install-recommends postgresql-$DB_VERSION
 RUN cpanm DBD::Pg 
-RUN perl Makefile.PL
-RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
-    service postgresql start && \
-    psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
-    psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
-    perl -I./lib ./script/create_db_postgresql_9.3.pl && \
-    sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf 
