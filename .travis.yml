@@ -12,7 +12,7 @@ jobs:
       - DISTRIBUTION_VERSION=18.04
       - DB=postgres
       - DB_VERSION=10
-      - PERL_VERSION=5.30.0
+      - PERL_VERSION=5.26.0
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - DOCKERFILE=Dockerfile.debian.dev
       - PERL5LIB=/usr/share/perl5 
@@ -22,8 +22,8 @@ jobs:
       - DISTRIBUTION_VERSION=16.04
       - DB=postgres
       - DOCKERFILE=Dockerfile.debian.dev
-      - DB_VERSION=9.3
-      - PERL_VERSION=5.26.0
+      - DB_VERSION=9.5
+      - PERL_VERSION=5.22.0
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - PERL5LIB=/usr/share/perl5 
       - ZONEMASTER_RECORD=0
