@@ -3,13 +3,6 @@ FROM $IMAGE_NAME
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Set the locale
-RUN apt-get -qq install locales
-RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen fr_FR.UTF-8 && \
-    dpkg-reconfigure locales && \
-    /usr/sbin/update-locale LANG=fr_FR.UTF-8
-ENV LC_ALL fr_FR.UTF-8  
 
 # Install a couple dependencies + extra packages
 RUN apt-get update --fix-missing -qq && apt-get install -qq \
@@ -19,9 +12,17 @@ RUN apt-get update --fix-missing -qq && apt-get install -qq \
     gcc \
     git \
     gpp \
+    locales \
     libncurses5-dev \
     libreadline-dev \
     libssl-dev
+
+# Set the locale
+RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen fr_FR.UTF-8 && \
+    dpkg-reconfigure locales && \
+    /usr/sbin/update-locale LANG=fr_FR.UTF-8
+ENV LC_ALL fr_FR.UTF-8  
 
 ARG PERL_VERSION 
 
