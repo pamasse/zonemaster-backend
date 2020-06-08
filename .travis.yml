@@ -33,11 +33,10 @@ before_script: #Here, we build all testing environments
     - docker build -t backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg PERL_VERSION=$PERL_VERSION --build-arg DB=$DB --build-arg DB_VERSION=$DB_VERSION .
     #Display images
     - docker images -a
-    - 
 
 script: #Here, we run tests on the container already build
     - if [[ "$DB" == "SQLite" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && cd app && perl Makefile.PL && make test"; fi
-    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && cd app && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
+    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && pwd && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
     - if [[ "$DB" == "MySQL" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl -I./lib ./t/test_DB_backend.pl MySQL"; fi
     
 
