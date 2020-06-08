@@ -22,8 +22,8 @@ jobs:
       - DISTRIBUTION_VERSION=16.04
       - DB=postgres
       - DOCKERFILE=Dockerfile.debian.dev
-      - DB_VERSION=10
-      - PERL_VERSION=5.30.0
+      - DB_VERSION=9.3
+      - PERL_VERSION=5.26.0
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - PERL5LIB=/usr/share/perl5 
       - ZONEMASTER_RECORD=0
@@ -35,8 +35,8 @@ before_script: #Here, we build all testing environments
     - docker images -a
 
 script: #Here, we run tests on the container already build
-    - if [[ "$DB" == "SQLite" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && cd app && perl Makefile.PL && make test"; fi
-    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && pwd && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
+    - if [[ "$DB" == "SQLite" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && perl Makefile.PL && make test"; fi
+    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
     - if [[ "$DB" == "MySQL" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl -I./lib ./t/test_DB_backend.pl MySQL"; fi
     
 

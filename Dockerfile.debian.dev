@@ -22,6 +22,7 @@ ENV PERLBREW_ROOT=/perl5
 
 RUN curl -L https://install.perlbrew.pl | bash && \
 		/perl5/bin/perlbrew init &&\
+		/perl5/bin/perlbrew install-cpanm &&\
 		/perl5/bin/perlbrew install -j 4 -n perl-$PERL_VERSION --switch
         
 ENV PERLBREW_ROOT=/perl5 \
