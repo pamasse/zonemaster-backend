@@ -4,7 +4,7 @@ FROM $IMAGE_NAME
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install a couple dependencies + extra packages
-RUN yum update --fix-missing -y && yum install -y \
+RUN yum -y update && yum install -y \
     build-essential \
     curl \
     gcc \
