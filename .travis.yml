@@ -12,25 +12,21 @@ jobs:
       - DISTRIBUTION_VERSION=18.04
       - DB=postgres
       - DB_VERSION=10
-      - PERL_VERSION=5.26.0
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - DOCKERFILE=Dockerfile.debian.dev
-      - PERL5LIB=/usr/share/perl5 
       - ZONEMASTER_RECORD=0
   - env: 
       - DISTRIBUTION=ubuntu
       - DISTRIBUTION_VERSION=16.04
       - DB=postgres
+      - DB_VERSION=9.3
       - DOCKERFILE=Dockerfile.debian.dev
-      - DB_VERSION=9.5
-      - PERL_VERSION=5.22.0
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
-      - PERL5LIB=/usr/share/perl5 
       - ZONEMASTER_RECORD=0
       
 before_script: #Here, we build all testing environments
     #Build image
-    - docker build -t backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg PERL_VERSION=$PERL_VERSION --build-arg DB=$DB --build-arg DB_VERSION=$DB_VERSION .
+    - docker build -t backend_dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg DB=$DB --build-arg DB_VERSION=$DB_VERSION .
     #Display images
     - docker images -a
 

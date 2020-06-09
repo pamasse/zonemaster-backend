@@ -3,7 +3,6 @@ FROM $IMAGE_NAME
 
 ENV DEBIAN_FRONTEND noninteractive
 
-
 # Install a couple dependencies + extra packages
 RUN apt-get update --fix-missing -qq && apt-get install -qq \
     apt-utils \
@@ -24,24 +23,6 @@ RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && \
     /usr/sbin/update-locale LANG=fr_FR.UTF-8
 ENV LC_ALL fr_FR.UTF-8  
 
-ARG PERL_VERSION 
-
-# Installation of the right PERL version
-ENV PERLBREW_ROOT=/perl5
-
-RUN curl -L https://install.perlbrew.pl | bash && \
-		/perl5/bin/perlbrew init &&\
-		/perl5/bin/perlbrew install -j 4 -n perl-$PERL_VERSION --switch  &&\
-        /perl5/bin/perlbrew install-cpanm
-        
-ENV PERLBREW_ROOT=/perl5 \
-	PATH=/perl5/bin:/perl5/perls/perl-$PERL_VERSION/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-	PERLBREW_PERL=perl-$PERL_VERSION \
-	PERLBREW_MANPATH=/perl5/perls/perl-$PERL_VERSION/man \
-	PERLBREW_PATH=/perl5/bin:/perl5/perls/perl-$PERL_VERSION/bin \
-	PERLBREW_SKIP_INIT=1
-
-RUN perl --version
 # From Zonemaster Engine installation instruction 
 RUN apt-get install --no-install-recommends -qq gettext libgettextpo-dev autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
 
@@ -75,12 +56,12 @@ WORKDIR app
 
 #RUN if [ "$DB" = "postgres" ]; then \
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
-RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client-$DB_VERSION && \
-    apt-get install -qq --no-install-recommends postgresql-$DB_VERSION
+RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client postgresql
+RUN ls -al /etc/postgresql/
 RUN cpanm --installdeps .
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
-    perl -I./lib ./script/create_db_postgresql_9.3.pl && \
+    perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl && \
     sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf 
