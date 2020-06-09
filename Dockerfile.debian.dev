@@ -12,6 +12,7 @@ RUN apt-get update --fix-missing -qq && apt-get install -qq \
     gcc \
     git \
     gpp \
+    software-properties-common \
     locales \
     libncurses5-dev \
     libreadline-dev \
@@ -75,7 +76,7 @@ WORKDIR app
 
 #RUN if [ "$DB" = "postgres" ]; then \
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
-RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl software-properties-common postgresql-client-$DB_VERSION && \
+RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client-$DB_VERSION && \
     apt-get install -qq --no-install-recommends postgresql-$DB_VERSION
 RUN cpanm DBD::Pg Config::IniFiles  
 RUN perl Makefile.PL
