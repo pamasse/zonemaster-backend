@@ -57,8 +57,7 @@ WORKDIR app
 #RUN if [ "$DB" = "postgres" ]; then \
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client postgresql
-RUN ls -al /etc/postgresql/
-RUN cpanm --installdeps .
+RUN cpanm DBD::Pg && cpanm --installdeps .
 RUN sed -i 's/peer/trust/' /etc/postgresql/*/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
