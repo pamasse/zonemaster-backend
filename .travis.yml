@@ -11,7 +11,7 @@ jobs:
       - DISTRIBUTION=ubuntu
       - DISTRIBUTION_VERSION=18.04
       - DB=postgres
-      - DB_VERSION=10
+      - DB_VERSION=9.3
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - DOCKERFILE=Dockerfile.debian.dev
       - ZONEMASTER_RECORD=0
@@ -32,7 +32,7 @@ before_script: #Here, we build all testing environments
 
 script: #Here, we run tests on the container already build
     - if [[ "$DB" == "SQLite" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && perl Makefile.PL && make test"; fi
-    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "service postgresql start && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
+    - if [[ "$DB" == "postgres" ]]; then docker run backend_dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB /bin/sh -c "service postgresql start && perl -I./lib ./t/test_DB_backend.pl PostgreSQL"; fi
     - if [[ "$DB" == "MySQL" ]]; then docker run backend_dev.$DISTRIBUTION.$DB.$PERL_VERSION /bin/sh -c "perl -I./lib ./t/test_DB_backend.pl MySQL"; fi
     
 

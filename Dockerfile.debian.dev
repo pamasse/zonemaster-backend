@@ -59,9 +59,9 @@ ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client postgresql
 RUN ls -al /etc/postgresql/
 RUN cpanm --installdeps .
-RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
+RUN sed -i 's/peer/trust/' /etc/postgresql/*/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
     perl -I./lib ./script/create_db_postgresql_$DB_VERSION.pl && \
-    sed -i 's/peer/md5/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf 
+    sed -i 's/peer/md5/' /etc/postgresql/*/main/pg_hba.conf 
