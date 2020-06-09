@@ -11,7 +11,6 @@ jobs:
       - DISTRIBUTION=ubuntu
       - DISTRIBUTION_VERSION=18.04
       - DB=postgres
-      - DB_VERSION=9.3
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - DOCKERFILE=Dockerfile.debian.dev
       - ZONEMASTER_RECORD=0
@@ -19,14 +18,41 @@ jobs:
       - DISTRIBUTION=ubuntu
       - DISTRIBUTION_VERSION=16.04
       - DB=postgres
-      - DB_VERSION=9.3
       - DOCKERFILE=Dockerfile.debian.dev
+      - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
+      - ZONEMASTER_RECORD=0
+  - env: 
+      - DISTRIBUTION=debian
+      - DISTRIBUTION_VERSION=9
+      - DB=postgres
+      - DOCKERFILE=Dockerfile.debian.dev
+      - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
+      - ZONEMASTER_RECORD=0      
+  - env: 
+      - DISTRIBUTION=debian
+      - DISTRIBUTION_VERSION=10
+      - DB=postgres
+      - DOCKERFILE=Dockerfile.debian.dev
+      - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
+      - ZONEMASTER_RECORD=0
+  - env: 
+      - DISTRIBUTION=centos
+      - DISTRIBUTION_VERSION=7
+      - DB=postgres
+      - DOCKERFILE=Dockerfile.centos.dev
+      - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
+      - ZONEMASTER_RECORD=0      
+  - env: 
+      - DISTRIBUTION=centos
+      - DISTRIBUTION_VERSION=8
+      - DB=postgres
+      - DOCKERFILE=Dockerfile.centos.dev
       - ZONEMASTER_BACKEND_CONFIG_FILE=./share/travis_postgresql_backend_config.ini
       - ZONEMASTER_RECORD=0
       
 before_script: #Here, we build all testing environments
     #Build image
-    - docker build -t backend_dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg DB=$DB --build-arg DB_VERSION=$DB_VERSION .
+    - docker build -t backend_dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg DB=$DB .    
     #Display images
     - docker images -a
 
