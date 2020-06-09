@@ -41,9 +41,9 @@ RUN cpan install Module::Install Module::Install::XSUtil && \
     
 RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaster-ldns.git && \
     if [ "$IMAGE_NAME" = "cenots:8" ]; then \
-        ( cd zonemaster-ldns && cpanm --verbose --notest . ) 
+        ( cd zonemaster-ldns && cpanm --verbose --notest . ); \
     else \
-        ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ) fi; && \
+        ( cd zonemaster-ldns && cpanm --verbose --notest --configure-args="--no-ed25519" . ); fi && \
     rm -rf zonemaster-ldns
     
     # Install Zonemaster Engine
