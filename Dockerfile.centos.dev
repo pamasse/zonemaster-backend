@@ -16,17 +16,14 @@ RUN yum -y update && yum install -y \
     libssl-dev
 
 # Set the locale
-RUN echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen fr_FR.UTF-8 && \
-    dpkg-reconfigure locales && \
-    /usr/sbin/update-locale LANG=fr_FR.UTF-8
-ENV LC_ALL fr_FR.UTF-8  
+RUN localedef -i fr_FR -f UTF-8 fr_FR.UTF-8
 
 # From Zonemaster Engine installation instruction 
 RUN yum install -y gettext libgettextpo-dev autoconf automake build-essential cpanminus libclone-perl libfile-sharedir-perl libfile-slurp-perl libidn11-dev libintl-perl libio-socket-inet6-perl libjson-pp-perl liblist-moreutils-perl liblocale-msgfmt-perl libmail-rfc822-address-perl libmodule-find-perl libnet-ip-perl libpod-coverage-perl libreadonly-perl libreadonly-xs-perl libssl-dev libtest-differences-perl libtest-exception-perl libtest-fatal-perl libtest-pod-perl libtext-csv-perl libtool m4
 
 # From Zonemaster Backend installation instruction 
-RUN yum install -y libclass-method-modifiers-perl libconfig-inifiles-perl libdbd-sqlite3-perl libdbi-perl libfile-sharedir-perl libfile-slurp-perl libhtml-parser-perl libio-captureoutput-perl libjson-pp-perl libjson-rpc-perl liblog-any-adapter-dispatch-perl liblog-any-perl liblog-dispatch-perl libplack-perl libplack-middleware-debug-perl librole-tiny-perl librouter-simple-perl libstring-shellquote-perl starman
+RUN yum install -y perl-Module-Install perl-IO-CaptureOutput perl-String-ShellQuote perl-Net-Server redhat-lsb-core
+
 
 # Zonemaster LDNS needs a newer version of Module::Install
 RUN cpan install Module::Install Module::Install::XSUtil && \
