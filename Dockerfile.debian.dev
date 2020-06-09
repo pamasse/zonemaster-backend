@@ -77,8 +77,7 @@ WORKDIR app
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client-$DB_VERSION && \
     apt-get install -qq --no-install-recommends postgresql-$DB_VERSION
-RUN cpanm DBD::Pg Config::IniFiles Log::Any String::ShellQuote Net::IP::XS JSON::Validator
-RUN perl Makefile.PL
+RUN cpanm --installdeps .
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
