@@ -62,4 +62,5 @@ RUN if [ "$DB" = "postgres" ]; then \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
     perl -I./lib ./script/create_db_postgresql_9.3.pl && \
-    sed -i 's/peer/md5/' /etc/postgresql/*/main/pg_hba.conf 
+    sed -i 's/peer/md5/' /etc/postgresql/*/main/pg_hba.conf \
+    fi;
