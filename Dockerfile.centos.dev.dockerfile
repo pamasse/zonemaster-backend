@@ -53,15 +53,15 @@ RUN git clone --depth=1 --branch=develop https://github.com/zonemaster/zonemaste
 
 ARG DB 
 ARG ZONEMASTER_BACKEND_CONFIG_FILE
+ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 
 COPY . /app
 WORKDIR app
 
-#RUN if [ "$DB" = "postgres" ]; then \
-ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
-RUN yum install -y libpq-dev libdbd-pg-perl postgresql-client postgresql
-RUN cpanm DBD::Pg && cpanm --installdeps .
-RUN sed -i 's/peer/trust/' /etc/postgresql/*/main/pg_hba.conf && \
+RUN if [ "$DB" = "postgres" ]; then \
+    yum install -y libpq-dev libdbd-pg-perl postgresql-client postgresql && \
+    cpanm DBD::Pg && cpanm --installdeps . && \
+    sed -i 's/peer/trust/' /etc/postgresql/*/main/pg_hba.conf && \
     service postgresql start && \
     psql -c "create user travis_zonemaster WITH PASSWORD 'travis_zonemaster';"  -U postgres && \
     psql -c 'create database travis_zonemaster OWNER travis_zonemaster;' -U postgres && \
