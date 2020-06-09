@@ -12,7 +12,6 @@ RUN apt-get update --fix-missing -qq && apt-get install -qq \
     gcc \
     git \
     gpp \
-    software-properties-common \
     locales \
     libncurses5-dev \
     libreadline-dev \
