@@ -77,7 +77,7 @@ WORKDIR app
 ENV ZONEMASTER_BACKEND_CONFIG_FILE $ZONEMASTER_BACKEND_CONFIG_FILE
 RUN apt-get install -qq --no-install-recommends libpq-dev libdbd-pg-perl postgresql-client-$DB_VERSION && \
     apt-get install -qq --no-install-recommends postgresql-$DB_VERSION
-RUN cpanm DBD::Pg Config::IniFiles  
+RUN cpanm DBD::Pg Config::IniFiles Log::Any
 RUN perl Makefile.PL
 RUN sed -i 's/peer/trust/' /etc/postgresql/$DB_VERSION/main/pg_hba.conf && \
     service postgresql start && \
