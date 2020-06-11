@@ -52,7 +52,7 @@ jobs:
       
 before_script: #Here, we build all testing environments
     #Build image
-    - docker build -t backend_dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=$DISTRIBUTION:$DISTRIBUTION_VERSION --build-arg DB=$DB .    
+    - docker build -t backend.dev.$DISTRIBUTION.$DISTRIBUTION_VERSION.$DB -f $DOCKERFILE --build-arg ZONEMASTER_BACKEND_CONFIG_FILE=$ZONEMASTER_BACKEND_CONFIG_FILE --build-arg IMAGE_NAME=engine.dev.$DISTRIBUTION.$DISTRIBUTION_VERSION --build-arg DB=$DB .    
     #Display images
     - docker images -a
 
